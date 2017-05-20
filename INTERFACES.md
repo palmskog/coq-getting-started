@@ -20,7 +20,7 @@ Installing and Running CoqIDE
 
 CoqIDE is a graphical editor for Coq written in OCaml by the Coq team. See https://coq.inria.fr/refman/Reference-Manual018.html
 
-The OPAM package for CoqIDE (`coqide`), depends on the OPAM package for the OCaml GTK interface, `lablgtk`. In turn, `lablgtk` requires 
+The OPAM package for CoqIDE (`coqide`), depends on the OPAM package for the OCaml GTK interface, `lablgtk`. In turn, `lablgtk` requires gtksourceview 2.0 with header files.
 
 In Ubuntu or Debian:
 
