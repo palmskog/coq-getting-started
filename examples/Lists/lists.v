@@ -130,33 +130,29 @@ proof.
 end proof.
 Qed.
 
-End BinaryTree.
-
-Section IntList.
-
-Open Scope Z_scope.
-
-Inductive IntList : Set :=
-| empty : IntList
-| intlist : Z -> IntList -> IntList.
-
-Fixpoint sum (il : IntList) : Z :=
-match il with 
-| empty => 0
-| intlist i il' => i + sum il'
-end.
-
-Eval compute in sum (intlist (-4) (intlist 7 (intlist (-1) empty))).
-
-Lemma example_int_list: sum (intlist (-4) (intlist 7 (intlist (-1) empty))) = 2.
-proof.
-  have (sum (intlist (-4) (intlist 7 (intlist (-1) empty)))
-       = -4 + sum ((intlist 7 (intlist (-1) empty)))).
-       ~= (-4 + 7 + sum ((intlist (-1) empty))).
-       ~= (-4 + 7 + -1 + sum (empty)).
-       ~= (-4 + 7 + -1 + 0).
-  thus ~= 2.
-end proof.
+Theorem complete_numleaves_height' : forall t, complete t -> numleaves t = 2^(height t).
+Proof.
+induction t; intros.
+- reflexivity.
+- apply complete_definition in H.
+  destruct H.
+  destruct H0.
+  apply IHt1 in H.
+  apply IHt2 in H0.  
+  simpl numleaves.
+  rewrite H.
+  rewrite H0.
+  assert (height t1 = max (height t1) (height t1)).
+    rewrite Zmax_idempotent; reflexivity.
+  assert (height (btree t1 t2) = (1 + (max (height t1) (height t2)))) by reflexivity.
+  rewrite H3.
+  rewrite <- H1.  
+  rewrite <- H2.
+  rewrite Zpower_exp; auto with zarith.
+  * assert (2 ^ height t1 + 2 ^ height t1 = 2 * 2 ^ height t1) by auto with zarith.
+    rewrite H4.
+    reflexivity.
+  * apply height_nonnegative.
 Qed.
 
-End IntList.
+End BinaryTree.

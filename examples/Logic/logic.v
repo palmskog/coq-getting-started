@@ -14,6 +14,11 @@ proof.
 end proof.
 Qed.
 
+Lemma Ex12_1a' : q /\ s.
+Proof.
+tauto.
+Qed.
+
 End Ex12_1a.
 
 (* Exercise 1.2) 1g *)
@@ -129,6 +134,11 @@ proof.
 end proof.
 Qed.
 
+Lemma Ex23_9' : (forall x, P x) -> q.
+Proof.
+firstorder.
+Qed.
+
 End Ex23_9.
 
 Section Ex23_9k.
@@ -154,6 +164,11 @@ proof.
   end claim.
   hence thesis by H1, H2.
 end proof.
+Qed.
+
+Lemma Ex23_9k' : (forall x, P x) /\ (forall x, Q x).
+Proof.
+firstorder.
 Qed.
 
 End Ex23_9k.
@@ -227,6 +242,11 @@ proof.
   have H1: (q -> R x) by H.
   hence thesis by H0, H1.
 end proof.
+Qed.
+
+Lemma KS_10_E' : q -> forall x, R x.
+Proof.
+firstorder.
 Qed.
 
 End KS_10_E.

@@ -14,56 +14,73 @@ Inductive odd : nat -> Prop :=
 
 (* alternative definition *)
 
-Fixpoint even_fix (n : nat) :=
+Fixpoint even' (n : nat) :=
   match n with
     | O => True
     | 1 => False
-    | S (S m) => even_fix m
+    | S (S m) => even' m
   end.
 
-Fixpoint odd_fix (n : nat) :=
+Fixpoint odd' (n : nat) :=
   match n with
     | O => False
     | 1 => True
-    | S (S m) => odd_fix m
+    | S (S m) => odd' m
   end.
+
+Eval compute in even' 3.
+
+Lemma not_even_3 : ~ even 3.
+Proof.
+intro.
+inversion H.
+subst.
+inversion H1.
+Qed.
+
+Lemma odd'_3 : odd' 3.
+Proof.
+compute.
+trivial.
+Qed.
+
+Lemma odd_3 : odd 3.
+Proof.
+apply other_odd.
+apply one_odd.
+Qed.
 
 Lemma even_implies_odd : forall n : nat, even n -> odd (S n).
 Proof.
- intros.
- elim H.
- constructor.
- intros.
- constructor.
- assumption.
+intros.
+induction H.
+- apply one_odd.
+- apply other_odd.
+  assumption.
 Qed.
 
 Lemma odd_implies_even : forall n : nat, odd n -> even (S n).
 Proof.
- intros.
- elim H.
- repeat constructor.
- intros.
- constructor.
- trivial.
+intros.
+induction H.
+- apply other_even.
+  apply zero_even.
+- apply other_even.
+  assumption.
 Qed.
 
 Theorem all_even_or_odd : forall n : nat, even n \/ odd n.
 Proof.
- intros n.
- elim n.
- left.
- constructor.
- intros.
- elim H.
- intros.
- right.
- apply even_implies_odd.
- assumption.
- intros.
- left.
- apply odd_implies_even.
- assumption.
+induction n.
+- left.
+  apply zero_even.
+- destruct IHn.
+  * right.
+    apply even_implies_odd.
+    assumption.
+  * left.
+    apply odd_implies_even.
+    assumption.
 Qed.
 
 Theorem all_even_or_odd_alt : forall n, even n \/ odd n.
@@ -87,10 +104,10 @@ Proof.
  auto.
 Qed.
 
-Theorem all_even_or_odd_fix : forall n : nat, even_fix n \/ odd_fix n.
+Theorem all_even_or_odd_fix : forall n : nat, even' n \/ odd' n.
 Proof.
  intros.
- apply (lt_wf_ind _ (fun (n:nat) => (even_fix n \/ odd_fix n))).
+ apply (lt_wf_ind _ (fun (n:nat) => (even' n \/ odd' n))).
  intros n0 H.
  induction n0.
  left; constructor.
@@ -101,7 +118,7 @@ Proof.
  auto.
 Qed.
 
-Theorem all_even_or_odd_fix_alt : forall n : nat, even_fix n \/ odd_fix n.
+Theorem all_even_or_odd_fix_alt : forall n : nat, even' n \/ odd' n.
 Proof.
  intros n0.
  elim n0 using (well_founded_ind (lt_wf)).

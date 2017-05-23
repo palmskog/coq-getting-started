@@ -75,3 +75,13 @@ induction l1; intros.
 - destruct l2; simpl; inversion H; inversion H4; auto.
   apply IHl1 in H9. rewrite H9. reflexivity.
 Qed.
+
+Extraction "alternate.ml" alternate.
+
+Extraction Language Haskell.
+Extraction "alternate.hs" alternate.
+
+Extraction Language Ocaml.
+Require Import ExtrOcamlBasic.
+Require Import ExtrOcamlNatInt.
+Extraction "alternate.ml" alternate.
